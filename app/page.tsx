@@ -1,11 +1,10 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { createServerComponentClient } from "@/lib/serverSupabase";
 import { redirect } from "next/navigation";
 import NewTodo from "./new-todo";
 import RealtimeTodos from "./realtime-todos";
 
 export default async function Home() {
-  const supabase = createServerComponentClient<Database>({ cookies });
+  const supabase = createServerComponentClient()
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -22,7 +21,6 @@ export default async function Home() {
   return (
     <>
       <h1>Hello, {session.user.email}</h1>
-      {/* @ts-expect-error this will be fixed in TS */}
       <NewTodo />
       <RealtimeTodos todos={todos ?? []} />
     </>
